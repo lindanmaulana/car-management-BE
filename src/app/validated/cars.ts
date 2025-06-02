@@ -1,4 +1,5 @@
 import { z, ZodType } from "zod";
+import { FUEL_TYPE, TRANSMISSION } from "../api/v1/car_details/types";
 
 export class CarValidation {
     static readonly CREATE: ZodType = z.object({
@@ -6,7 +7,15 @@ export class CarValidation {
         brand_id: z.string().min(1),
         model: z.string().min(1),
         price: z.preprocess((val) => Number(val), z.number().positive()),
-        thumbnail: z.string().optional()
+        thumbnail: z.string().optional(),
+
+        year: z.string().min(1),
+        transmission: z.enum([TRANSMISSION.MANUAL, TRANSMISSION.AUTOMATIC]),
+        fuel_type: z.enum([FUEL_TYPE.BENSIN, FUEL_TYPE.SOLAR, FUEL_TYPE.LISTRIK, FUEL_TYPE.HYBRID]),
+        plate_number: z.string().min(6),
+        mileage: z.number().min(1),
+        color: z.string().min(1),
+        description: z.string().min(1)
     })
 
     static readonly GETALL: ZodType = z.object({

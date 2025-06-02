@@ -1,5 +1,6 @@
 import { HydratedDocument, Types } from "mongoose";
 import { CarImageResponse } from "../car_images/types";
+import { CarDetailCreateRequest } from "../car_details/types";
 
 enum CARSTATUS {
     available,
@@ -48,7 +49,7 @@ export interface CarResponse {
     __v: number
 }
 
-export interface CarCreateRequest {
+export interface CarCreateRequest extends CarDetailCreateRequest {
     name: string
     brand_id: string
     model: string

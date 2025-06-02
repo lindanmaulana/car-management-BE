@@ -1,4 +1,5 @@
 import Cars from "../../app/api/v1/cars/model";
+import CarDetails from "../../app/api/v1/car_details/model"
 
 import { BrandServices } from "./brands";
 
@@ -21,6 +22,18 @@ export class CarServices {
 
         const result = (await Cars.create(request))
         if(!result) throw new BadRequestError("An error occurred while saving data")
+
+        const resultCarDetail = await CarDetails.create({
+            car_id: result._id,
+            year: request.year,
+            transmission: request.transmission,
+            fuel_type: request.fuel_type,
+            plate_number: request.plate_number,
+            mileage: request.mileage,
+            color: request.color,
+            description: request.description
+        })
+        if(!resultCarDetail) throw new BadRequestError("The car details could not be created")
 
         const resultWithBrand = await Cars.findById({_id: result._id}).populate({
             path: "brand_id",
@@ -182,7 +195,6 @@ export class CarServices {
         
         return toCarResponse(resultUpdate)
     }
-
 
     static async delete(req: CarDeleteRequest): Promise<CarResponse> {
         const request = Validation.validate(CarValidation.DELETE, req)
